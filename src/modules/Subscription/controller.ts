@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { SubscriptionService, type PersonalData } from "./service";
+import { SubscriptionService, type SubscriptionData } from "./service";
 
 class SubscriptionController {
   private service: SubscriptionService;
@@ -10,8 +10,8 @@ class SubscriptionController {
 
   async createSubscription(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const {userId, personalData, healthData, paymentData, status} = request.body as {userId : string, personalData: PersonalData, healthData: Object, paymentData: Object, status: string};
-      const subscription = await this.service.createSubscription(userId, personalData, healthData);
+      const subscriptionData = request.body as SubscriptionData;  
+      const subscription = await this.service.createSubscription(subscriptionData);
 
       return reply.code(201).send({
         message: "Subscription created successfully",
