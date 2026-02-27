@@ -29,8 +29,6 @@ class UserService {
     }
 
 
-
-
     async existEmail(email: string){
         const user = await UserModel.findOne({email});
         if(user){
