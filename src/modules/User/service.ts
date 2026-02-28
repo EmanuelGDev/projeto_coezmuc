@@ -47,16 +47,6 @@ class UserService {
     }
 
 
-
-
-    async encyptPassword(password: string){
-        try{
-            const hashedPassword = await bcrypt.hash(password, 10);
-            return hashedPassword;
-        }catch(err){
-            return {error: "Error encrypting password"};
-        }
-    }
 }
 
 export { UserService }
