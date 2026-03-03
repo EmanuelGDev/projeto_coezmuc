@@ -8,6 +8,10 @@ async function subscriptionRoutes(fastify : FastifyInstance){
     fastify.post('/create', async (request, reply) => {
         return subscriptionController.createSubscription(request, reply);
     });
+
+    fastify.get('/', async (request, reply) => {
+        return subscriptionController.getSubscriptions(request, reply);
+    });
 }
 
 export { subscriptionRoutes }

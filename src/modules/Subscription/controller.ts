@@ -22,6 +22,19 @@ class SubscriptionController {
       return reply.code(400).send({ error: message });
     }
   }
+
+  async getSubscriptions(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const subscriptions = await this.service.getSubscriptions();
+      return reply.code(200).send({
+        message: "Subscriptions retrieved successfully",
+        data: subscriptions,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unexpected error";
+      return reply.code(400).send({ error: message });
+    }
+  }
 }
 
 export { SubscriptionController }

@@ -53,6 +53,11 @@ class SubscriptionService {
 
     return newSubscription;
   }
+
+  async getSubscriptions() {
+    const subscriptions = await SubscriptionModel.find().populate("userId", "username");
+    return subscriptions;
+  }
 }
 
 export { SubscriptionService };
