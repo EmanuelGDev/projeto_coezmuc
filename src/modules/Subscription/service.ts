@@ -55,7 +55,11 @@ class SubscriptionService {
   }
 
   async getSubscriptions() {
-    const subscriptions = await SubscriptionModel.find().populate("userId", "username");
+    const subscriptions = await SubscriptionModel.find()
+      .sort({ "personalData.name": 1 })
+      .collation({ locale: "pt", strength: 1 })
+      .populate("userId", "username");
+
     return subscriptions;
   }
 }
