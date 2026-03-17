@@ -11,6 +11,10 @@ export type SubscriptionData = {
     centroEspirita: string;
     badgeName: string;
     emergencyContact?: string;
+    minorsGuardianName?: string;
+    address: string;
+    imageConsent: boolean;
+    regulationsConsent: boolean;
   },
   healthData: {
     restricaoAlimentar?: string;
@@ -38,7 +42,11 @@ class SubscriptionService {
       throw new Error("User not found");
     }
 
-    const fullValue = data.personalData.age < 6 ? 100 : 200;
+    if(data.personalData.imageConsent === false || data.personalData.regulationsConsent === false) {
+      throw new Error("Consentimento para uso de imagem e regulamento é obrigatório");
+    }
+
+    const fullValue = data.personalData.age < 3 ? 0 : data.personalData.age < 6 ? 150 : data.personalData.age < 11 ? 200 : 400;
 
     const newSubscription = await SubscriptionModel.create({
       userId: new mongoose.Types.ObjectId(data.userId),

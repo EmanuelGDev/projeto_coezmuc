@@ -2,16 +2,15 @@ import { UserModel } from "../../lib/scheema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-class AuthService{
+class AuthService {
 
-    async login(email : string, password : string) {
-
-        if(!email || !password){
+    async login(email: string, password: string) {
+        if (!email || !password) {
             throw new Error("Missing required fields");
         }
 
-        const jwt_secret = process.env.JWT_SECRET as string
-    
+        const jwt_secret = process.env.JWT_SECRET as string;
+
         const user = await UserModel.findOne({ email });
 
         if (!user) {
@@ -23,10 +22,20 @@ class AuthService{
             throw new Error("Invalid password");
         }
 
-        const token = jwt.sign({ userId: user._id, user: user }, jwt_secret, { expiresIn: '12h' });
-        return token;
+        const token = jwt.sign(
+            { userId: user._id },
+            jwt_secret,
+            { expiresIn: '12h' }
+        );
+
+        return {
+            id: user._id,
+            name: user.username,
+            email: user.email,
+            token
+        };
     }
 
 }
 
-export {AuthService}
+export { AuthService }

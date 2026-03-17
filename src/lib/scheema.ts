@@ -14,10 +14,14 @@ const subscription = new mongoose.Schema({
     name: { type: String, required: true },
     age: { type: Number, required: true },
     phoneNumber: { type: String, required: true },
+    minorsGuardianName: { type: String },
     city: { type: String, required: true },
     centroEspirita: { type: String, required: true },
     badgeName: { type: String, required: true },
     emergencyContact: { type: String},
+    address: { type: String, required: true },
+    imageConsent: { type: Boolean, required: true },
+    regulationsConsent: { type: Boolean, required: true },
   },
 
   healthData: {

@@ -14,7 +14,6 @@ class SubscriptionController {
       const subscription = await this.service.createSubscription(subscriptionData);
 
       return reply.code(201).send({
-        message: "Subscription created successfully",
         data: subscription,
       });
     } catch (err) {
@@ -27,8 +26,7 @@ class SubscriptionController {
     try {
       const subscriptions = await this.service.getSubscriptions();
       return reply.code(200).send({
-        message: "Subscriptions retrieved successfully",
-        data: subscriptions,
+        data: subscriptions
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unexpected error";
