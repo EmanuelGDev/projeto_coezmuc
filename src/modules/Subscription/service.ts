@@ -70,6 +70,18 @@ class SubscriptionService {
 
     return subscriptions;
   }
+
+  async getSubscriptionByUserId(userId: string) {
+    const subscription = await SubscriptionModel.find({ userId: new mongoose.Types.ObjectId(userId) })
+      .populate("userId", "username");
+    return subscription;
+  }
+
+  async getSubscriptionById(id: string) {
+    const subscription = await SubscriptionModel.findById(new mongoose.Types.ObjectId(id))
+      .populate("userId", "username");
+    return subscription;
+  }
 }
 
 export { SubscriptionService };
