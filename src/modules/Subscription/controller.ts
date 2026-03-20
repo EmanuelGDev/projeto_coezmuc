@@ -9,8 +9,9 @@ class SubscriptionController {
   }
 
   async createSubscription(request: FastifyRequest, reply: FastifyReply) {
+
     try {
-      const subscriptionData = request.body as SubscriptionData;  
+      const subscriptionData = request.body as SubscriptionData;
       const subscription = await this.service.createSubscription(subscriptionData);
 
       return reply.code(201).send({
