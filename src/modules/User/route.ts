@@ -10,7 +10,7 @@ async function userRoutes(fastify : FastifyInstance){
         return userController.getUser(request, reply);
     });
 
-    fastify.post('/create', { preHandler: [authenticate] }, async (request, reply) => {
+    fastify.post('/create', async (request, reply) => {
         return userController.createUser(request, reply);
     });
 
