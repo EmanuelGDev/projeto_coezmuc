@@ -14,9 +14,10 @@ class UserService {
         await this.confirmPassword(password, confirmPassword);
         
         const hashedPassword = await bcrypt.hash(password, 10);
+        const isAdmin = false
         
 
-        const newUser = await UserModel.create({username, email, password: hashedPassword});
+        const newUser = await UserModel.create({username, email, password: hashedPassword, isAdmin});
         return (await newUser).save();
     }
 

@@ -25,7 +25,7 @@ class SubscriptionController {
 
   async getSubscriptions(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const subscriptions = await this.service.getSubscriptions();
+      const subscriptions = await this.service.getSubscriptions(request);
       return reply.code(200).send({
         data: subscriptions
       });

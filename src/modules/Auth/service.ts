@@ -23,7 +23,9 @@ class AuthService {
         }
 
         const token = jwt.sign(
-            { userId: user._id },
+            { userId: user._id,
+                isAdmin: Boolean(user.isAdmin)
+             },
             jwt_secret,
             { expiresIn: '12h' }
         );

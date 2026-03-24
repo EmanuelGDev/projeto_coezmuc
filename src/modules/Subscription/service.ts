@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { SubscriptionModel, UserModel } from "../../lib/scheema";
+import { FastifyRequest } from "fastify";
 
 export type SubscriptionData = {
   userId: string;
@@ -62,7 +63,19 @@ class SubscriptionService {
     return newSubscription;
   }
 
-  async getSubscriptions() {
+  async getSubscriptions(request:FastifyRequest) {
+
+    const user = (request as any).user
+
+    if(!user){
+      throw new Error("User not found")
+    }
+
+    console.log(user)
+
+    if(!user.isAdmin){
+      throw new Error("Only admin are allowed to do this action")
+    }
     const subscriptions = await SubscriptionModel.find()
       .sort({ "personalData.name": 1 })
       .collation({ locale: "pt", strength: 1 })
