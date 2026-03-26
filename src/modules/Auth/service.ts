@@ -34,7 +34,9 @@ class AuthService {
             id: user._id,
             name: user.username,
             email: user.email,
-            token
+            token,
+            isAdmin: Boolean(user.isAdmin)
+            
         };
     }
 
