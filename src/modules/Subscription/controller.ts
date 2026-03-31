@@ -65,6 +65,24 @@ class SubscriptionController {
     }
   }
 
+  async updateSubscription(request: FastifyRequest, reply: FastifyReply) {
+  try {
+    const { id } = request.params as { id: string };
+    const updateData = request.body as Partial<SubscriptionData>;
+
+    const updated = await this.service.updateSubscription(id, updateData, request);
+
+    if (!updated) {
+      return reply.code(404).send({ error: "Subscription not found" });
+    }
+
+    return reply.code(200).send({ data: updated });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unexpected error";
+    return reply.code(400).send({ error: message });
+  }
+}
+
 }
 
 export { SubscriptionController }

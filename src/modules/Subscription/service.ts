@@ -43,7 +43,7 @@ class SubscriptionService {
       throw new Error("User not found");
     }
 
-    if(data.personalData.imageConsent === false || data.personalData.regulationsConsent === false) {
+    if (data.personalData.imageConsent === false || data.personalData.regulationsConsent === false) {
       throw new Error("Consentimento para uso de imagem e regulamento é obrigatório");
     }
 
@@ -63,17 +63,17 @@ class SubscriptionService {
     return newSubscription;
   }
 
-  async getSubscriptions(request:FastifyRequest) {
+  async getSubscriptions(request: FastifyRequest) {
 
     const user = (request as any).user
 
-    if(!user){
+    if (!user) {
       throw new Error("User not found")
     }
 
     console.log(user)
 
-    if(!user.isAdmin){
+    if (!user.isAdmin) {
       throw new Error("Only admin are allowed to do this action")
     }
     const subscriptions = await SubscriptionModel.find()
@@ -94,6 +94,47 @@ class SubscriptionService {
     const subscription = await SubscriptionModel.findById(new mongoose.Types.ObjectId(id))
       .populate("userId", "username");
     return subscription;
+  }
+
+  async updateSubscription(id: string, data: Partial<SubscriptionData>, request: FastifyRequest) {
+    const user = (request as any).user;
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.isAdmin) {
+      throw new Error("Only admins are allowed to do this action");
+    }
+
+    if (!id) {
+      throw new Error("É necessário o id da subscription");
+    }
+
+    const subscription = await SubscriptionModel.findById(new mongoose.Types.ObjectId(id));
+
+    if (!subscription) {
+      throw new Error("Subscription not found");
+    }
+
+    // Recalcula fullValue se age foi atualizado
+    if (data.personalData?.age !== undefined) {
+      const age = data.personalData.age;
+      data.paymentData = {
+        ...data.paymentData,
+        fullValue: age < 3 ? 0 : age < 6 ? 150 : age < 11 ? 200 : 400,
+        paidValue: data.paymentData?.paidValue ?? subscription.paymentData?.paidValue ?? 0,
+        paymentStatus: data.paymentData?.paymentStatus ?? subscription.paymentData?.paymentStatus ?? "pending",
+      };
+    }
+
+    const updatedSubscription = await SubscriptionModel.findByIdAndUpdate(
+      new mongoose.Types.ObjectId(id),
+      { $set: data },
+      { new: true, runValidators: true }
+    ).populate("userId", "username");
+
+    return updatedSubscription;
   }
 }
 

@@ -18,6 +18,9 @@ async function subscriptionRoutes(fastify: FastifyInstance) {
     fastify.get('/:id', { preHandler: [authenticate] }, async (request, reply) => {
         return subscriptionController.getSubscriptionById(request, reply);
     })
+    fastify.put('/update/:id', { preHandler: [authenticate] }, async (request, reply) => {
+        return subscriptionController.updateSubscription(request,reply);
+    })
 }
 
 export { subscriptionRoutes }
