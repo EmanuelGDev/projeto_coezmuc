@@ -35,20 +35,17 @@ class SubscriptionController {
     }
   }
 
-  async getSubscriptionByUserId(request: FastifyRequest, reply: FastifyReply) {
-    try {
-      const { userId } = request.params as { userId: string };
-      const subscription = await this.service.getSubscriptionByUserId(userId);
+async getSubscriptionByUserId(request: FastifyRequest, reply: FastifyReply) {
+  try {
+    const { userId } = request.params as { userId: string };
+    const subscriptions = await this.service.getSubscriptionByUserId(userId);
 
-      if (!subscription) {
-        return reply.code(404).send({ error: "Subscription not found" });
-      }
-      return reply.code(200).send({ data: subscription });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unexpected error";
-      return reply.code(400).send({ error: message });
-    }
+    return reply.code(200).send({ data: subscriptions }); 
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unexpected error";
+    return reply.code(400).send({ error: message });
   }
+}
 
   async getSubscriptionById(request: FastifyRequest, reply: FastifyReply) {
     try {

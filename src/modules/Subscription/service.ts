@@ -16,24 +16,25 @@ export type SubscriptionData = {
     address: string;
     imageConsent: boolean;
     regulationsConsent: boolean;
-  },
+  };
   healthData: {
     restricaoAlimentar?: string;
     restricaoMedica?: string;
     cuidadosEspeciais?: string;
-  },
+  };
   paymentData: {
     fullValue: number;
     paidValue: number;
     paymentStatus: string;
-  }
-}
+  };
+  status: {
+    subscriptionStatus: string;
+  };
+};
 
 class SubscriptionService {
 
   async createSubscription(data: SubscriptionData) {
-
-
     if (!data.userId || !data.personalData) {
       throw new Error("Missing required fields");
     }
@@ -56,26 +57,24 @@ class SubscriptionService {
       paymentData: {
         fullValue,
         paidValue: 0,
-        paymentStatus: "pending"
-      }
+        paymentStatus: "pending",
+      },
     });
 
     return newSubscription;
   }
 
   async getSubscriptions(request: FastifyRequest) {
-
-    const user = (request as any).user
+    const user = (request as any).user;
 
     if (!user) {
-      throw new Error("User not found")
+      throw new Error("User not found");
     }
-
-    console.log(user)
 
     if (!user.isAdmin) {
-      throw new Error("Only admin are allowed to do this action")
+      throw new Error("Only admin are allowed to do this action");
     }
+
     const subscriptions = await SubscriptionModel.find()
       .sort({ "personalData.name": 1 })
       .collation({ locale: "pt", strength: 1 })
