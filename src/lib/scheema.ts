@@ -50,6 +50,13 @@ const subscription = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const Revenue = new mongoose.Schema({
+  type: { type: String, required: true },
+  description: { type: String, required: true },
+  date: { type: Date, default: Date.now },
+  value: { type: Number, required: true },
+});
 
 export const UserModel = mongoose.model('User', User);
 export const SubscriptionModel = mongoose.model('Subscription', subscription);
+export const RevenueModel = mongoose.model('Revenue', Revenue);
