@@ -1,8 +1,8 @@
 import { FastifyRequest } from "fastify";
-import { RevenueModel } from "../../lib/scheema";
+import { ExpenseModel } from "../../lib/scheema";
 
 
-export type RevenueData = {
+export type ExpenseData = {
     type: string;
     description: string;
     date: Date;
@@ -10,13 +10,11 @@ export type RevenueData = {
 }
 
 
-class RevenueService {
+class ExpenseService {
 
-    types = ["Doação", "Arredacação", "Sobra Coezmuc Anterior", "Outros"];
+    async createExpense(data: ExpenseData, request: FastifyRequest) {
 
-    async createRevenue(data: RevenueData, request: FastifyRequest) {
-
-        const user = (request as any).user;
+const user = (request as any).user;
         if (!user) {
             throw new Error("User not found");
         } else if (!user.isAdmin) {
@@ -26,38 +24,38 @@ class RevenueService {
         if (!data.type || !data.description || !data.value) {
             throw new Error("Missing required fields");
         }
-        const newRevenue = await RevenueModel.create({
+        const newExpense = await ExpenseModel.create({
             type: data.type,
             description: data.description,
             value: data.value
         });
-        return newRevenue;
+        return newExpense;
     }
 
-    async deleteRevenue(id: string, request: FastifyRequest) {
+    async deleteExpense(id: string, request: FastifyRequest) {
 
-        const user = (request as any).user;
+const user = (request as any).user;
         if (!user) {
             throw new Error("User not found");
         } else if (!user.isAdmin) {
             throw new Error("Only admins are allowed to do this action");
         }
 
-        const revenue = await RevenueModel.findById(id);
-        if (!revenue) {
-            throw new Error("Revenue not found");
+        const Expense = await ExpenseModel.findById(id);
+        if (!Expense) {
+            throw new Error("Expense not found");
         }
-        await RevenueModel.findByIdAndDelete(id);
+        await ExpenseModel.findByIdAndDelete(id);
     }
 
-    async getRevenues(request: FastifyRequest) {
+    async getExpenses(request: FastifyRequest) {
         const user = (request as any).user;
         if (!user) {
             throw new Error("User not found");
         } else if (!user.isAdmin) {
             throw new Error("Only admins are allowed to do this action");
         }
-        return await RevenueModel.find();
+        return await ExpenseModel.find();
     }
 
     async validateAdmin(request: FastifyRequest) {
@@ -65,4 +63,4 @@ class RevenueService {
     }
 }
 
-export default RevenueService;
+export default ExpenseService;

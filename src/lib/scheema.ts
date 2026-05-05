@@ -57,6 +57,14 @@ const Revenue = new mongoose.Schema({
   value: { type: Number, required: true },
 });
 
+const Expense = new mongoose.Schema({
+  type: { type: String, required: true },
+  description: { type: String, required: true },
+  date: { type: Date, default: Date.now },
+  value: { type: Number, required: true },
+});
+
 export const UserModel = mongoose.model('User', User);
 export const SubscriptionModel = mongoose.model('Subscription', subscription);
 export const RevenueModel = mongoose.model('Revenue', Revenue);
+export const ExpenseModel = mongoose.model('Expense', Expense);
