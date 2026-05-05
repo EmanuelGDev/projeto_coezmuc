@@ -13,6 +13,7 @@ const subscription = new mongoose.Schema({
 
   personalData: {
     name: { type: String, required: true },
+    cpf : { type: String, required: true, unique: true },
     age: { type: Number, required: true },
     phoneNumber: { type: String, required: true },
     minorsGuardianName: { type: String },
