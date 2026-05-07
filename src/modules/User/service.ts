@@ -1,5 +1,5 @@
 
-import { UserModel } from "../../lib/scheema";
+import { UserModel } from "../../lib/scheema.js";
 import bcrypt from "bcrypt";
 
 class UserService {
