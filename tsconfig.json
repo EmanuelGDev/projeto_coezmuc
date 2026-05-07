@@ -1,14 +1,12 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
-  "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "bundler",
+"compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "ES2020",
     "rootDir": "./",
     "outDir": "./dist",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,

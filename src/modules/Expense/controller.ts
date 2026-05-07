@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import ExpenseService, { ExpenseData } from "./service";
+import ExpenseService, { ExpenseData } from "./service.js";
 
 class ExpenseController {
     private service: ExpenseService;

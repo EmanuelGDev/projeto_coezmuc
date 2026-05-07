@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { SubscriptionService, type SubscriptionData } from "./service";
+import { SubscriptionService, type SubscriptionData } from "./service.js";
 
 class SubscriptionController {
   private service: SubscriptionService;

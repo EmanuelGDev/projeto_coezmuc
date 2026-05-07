@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import { ExpenseModel } from "../../lib/scheema";
+import { ExpenseModel } from "../../lib/scheema.js";
 
 
 export type ExpenseData = {

@@ -1,5 +1,5 @@
-import authenticate from "../../lib/jwt";
-import RevenueController from "./controller";
+import authenticate from "../../lib/jwt.js";
+import RevenueController from "./controller.js";
 import type { FastifyInstance } from "fastify";
 
 async function revenueRoutes(fastify: FastifyInstance) {

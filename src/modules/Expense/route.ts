@@ -1,6 +1,6 @@
-import authenticate from "../../lib/jwt";
+import authenticate from "../../lib/jwt.js";
 import type { FastifyInstance } from "fastify";
-import ExpenseController from "./controller";
+import ExpenseController from "./controller.js";
 
 async function ExpenseRoutes(fastify: FastifyInstance) {
     const expenseController = new ExpenseController();

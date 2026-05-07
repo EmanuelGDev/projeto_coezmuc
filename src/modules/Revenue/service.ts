@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import { RevenueModel } from "../../lib/scheema";
+import { RevenueModel } from "../../lib/scheema.js";
 
 
 export type RevenueData = {

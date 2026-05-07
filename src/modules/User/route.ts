@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import { UserController } from "./controller";
-import authenticate from "../../lib/jwt";
+import { UserController } from "./controller.js";
+import authenticate from "../../lib/jwt.js";
 
 async function userRoutes(fastify : FastifyInstance){
 

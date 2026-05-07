@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SubscriptionModel, UserModel } from "../../lib/scheema";
+import { SubscriptionModel, UserModel } from "../../lib/scheema.js";
 import { FastifyRequest } from "fastify";
 
 export type SubscriptionData = {

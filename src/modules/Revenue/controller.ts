@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import RevenueService, { RevenueData } from "./service";
+import RevenueService, { RevenueData } from "./service.js";
 
 class RevenueController {
     private service: RevenueService;

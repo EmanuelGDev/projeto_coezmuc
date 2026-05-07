@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { userRoutes } from "../modules/User/route";
-import { authRoutes } from "../modules/Auth/route";
-import { subscriptionRoutes } from "../modules/Subscription/route";
-import { revenueRoutes } from "../modules/Revenue/route";
+import { userRoutes } from "../modules/User/route.js";
+import { authRoutes } from "../modules/Auth/route.js";
+import { subscriptionRoutes } from "../modules/Subscription/route.js";
+import { revenueRoutes } from "../modules/Revenue/route.js";
 
 async function routes(fastify: FastifyInstance) {
     fastify.get("/ping", async (request, reply) => {
