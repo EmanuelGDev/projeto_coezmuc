@@ -1,11 +1,12 @@
 import type { FastifyInstance } from "fastify";
-import { UserController } from "./controller";
+import { UserController } from "./controller.js";
+import authenticate from "../../lib/jwt.js";
 
 async function userRoutes(fastify : FastifyInstance){
 
     const userController = new UserController();
 
-    fastify.get('/:id', async (request, reply) => {
+    fastify.get('/:id',{ preHandler: [authenticate] }, async (request, reply) => {
         return userController.getUser(request, reply);
     });
 

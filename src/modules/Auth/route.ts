@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { AuthController } from "./controller";
+import { AuthController } from "./controller.js";
 
 async function authRoutes(fastify : FastifyInstance){
 

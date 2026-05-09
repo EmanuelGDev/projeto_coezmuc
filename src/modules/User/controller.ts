@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from "fastify"
-import { UserService } from "./service";
+import { UserService } from "./service.js";
 
 class UserController {
 
