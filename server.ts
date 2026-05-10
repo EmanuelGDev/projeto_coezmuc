@@ -1,4 +1,5 @@
-import "dotenv/config";
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 import fastify from 'fastify';
 import cors from '@fastify/cors'
 import mongoose from 'mongoose';
