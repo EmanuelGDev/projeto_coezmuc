@@ -19,7 +19,7 @@ class SubscriptionController {
     }
 
     // Erros de "not found" retornam 404
-    if (message.toLowerCase().includes("not found") || message.toLowerCase().includes("não encontrad")) {
+    if (message.toLowerCase().includes("not found") || message.toLowerCase().includes("não encontrado")) {
       return reply.code(404).send({ error: message });
     }
 
