@@ -21,6 +21,7 @@ app.setErrorHandler((error, request, reply) => {
 
 const start = async () => {
     await app.register(cors, {
+        origin: process.env.CORS_ORIGIN || "*",
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
