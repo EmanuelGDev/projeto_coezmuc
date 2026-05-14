@@ -14,6 +14,13 @@ async function revenueRoutes(fastify: FastifyInstance) {
     fastify.get('/', { preHandler: [authenticate] }, async (request, reply) => {
         return revenueController.getRevenues(request, reply);
     });
+    fastify.put('/update/:id', { preHandler: [authenticate] }, async (request, reply) => {
+        return revenueController.updateRevenue(request, reply);
+    });
+    fastify.get('/types', { preHandler: [authenticate] }, async (request, reply) => {
+       
+        return revenueController.getTypes(request, reply);
+    });
 }
 
 export { revenueRoutes }

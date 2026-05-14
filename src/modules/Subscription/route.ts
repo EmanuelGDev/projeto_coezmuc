@@ -21,6 +21,9 @@ async function subscriptionRoutes(fastify: FastifyInstance) {
     fastify.put('/update/:id', { preHandler: [authenticate] }, async (request, reply) => {
         return subscriptionController.updateSubscription(request,reply);
     })
+    fastify.get('/revenue-summary', { preHandler: [authenticate] }, async (request, reply) => {
+    return subscriptionController.getRevenueSummary(request, reply);
+});
 }
 
 export { subscriptionRoutes }

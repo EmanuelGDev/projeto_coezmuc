@@ -35,14 +35,14 @@ export type SubscriptionData = {
 
 // Campos obrigatórios de personalData e suas mensagens
 const REQUIRED_PERSONAL_FIELDS: { field: keyof SubscriptionData["personalData"]; message: string }[] = [
-  { field: "name",           message: "Nome é obrigatório" },
-  { field: "cpf",            message: "CPF é obrigatório" },
-  { field: "age",            message: "Idade é obrigatória" },
-  { field: "phoneNumber",    message: "Telefone é obrigatório" },
-  { field: "city",           message: "Cidade é obrigatória" },
+  { field: "name", message: "Nome é obrigatório" },
+  { field: "cpf", message: "CPF é obrigatório" },
+  { field: "age", message: "Idade é obrigatória" },
+  { field: "phoneNumber", message: "Telefone é obrigatório" },
+  { field: "city", message: "Cidade é obrigatória" },
   { field: "centroEspirita", message: "Centro espírita é obrigatório" },
-  { field: "badgeName",      message: "Nome do crachá é obrigatório" },
-  { field: "address",        message: "Endereço é obrigatório" },
+  { field: "badgeName", message: "Nome do crachá é obrigatório" },
+  { field: "address", message: "Endereço é obrigatório" },
 ];
 
 class SubscriptionService {
@@ -50,8 +50,8 @@ class SubscriptionService {
   // ─── Helpers privados ────────────────────────────────────────────────────────
 
   private calculateFullValue(age: number): number {
-    if (age < 3)  return 0;
-    if (age < 6)  return 150;
+    if (age < 3) return 0;
+    if (age < 6) return 150;
     if (age < 11) return 200;
     return 400;
   }
@@ -138,8 +138,8 @@ class SubscriptionService {
     // Recalcula fullValue se a idade foi alterada
     if (data.personalData?.age !== undefined) {
       data.paymentData = {
-        fullValue:     this.calculateFullValue(data.personalData.age),
-        paidValue:     data.paymentData?.paidValue     ?? subscription.paymentData?.paidValue     ?? 0,
+        fullValue: this.calculateFullValue(data.personalData.age),
+        paidValue: data.paymentData?.paidValue ?? subscription.paymentData?.paidValue ?? 0,
         paymentStatus: data.paymentData?.paymentStatus ?? subscription.paymentData?.paymentStatus ?? "pending",
       };
     }
@@ -149,6 +149,20 @@ class SubscriptionService {
       { $set: data },
       { new: true, runValidators: true }
     ).populate("userId", "username");
+  }
+
+  async getRevenueSummary() {
+    const result = await SubscriptionModel.aggregate([
+      { $match: { "paymentData.paidValue": { $gt: 0 } } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$paymentData.paidValue" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    return result[0] ?? { total: 0, count: 0 };
   }
 }
 

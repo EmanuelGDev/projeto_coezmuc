@@ -83,6 +83,15 @@ class SubscriptionController {
       return this.handleError(err, reply);
     }
   }
+
+  async getRevenueSummary(request: FastifyRequest, reply: FastifyReply) {
+    try {
+        const summary = await this.service.getRevenueSummary();
+        return reply.code(200).send({ data: summary });
+    } catch (err) {
+        return this.handleError(err, reply);
+    }
+}
 }
 
 export { SubscriptionController };

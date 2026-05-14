@@ -60,9 +60,18 @@ class RevenueService {
         return await RevenueModel.find();
     }
 
-    async validateAdmin(request: FastifyRequest) {
+    async updateRevenue(id: string, data: Partial<RevenueData>, request: FastifyRequest) {
+        const user = (request as any).user;
+        if (!user) throw new Error("User not found");
+        if (!user.isAdmin) throw new Error("Only admins are allowed to do this action");
 
+        const revenue = await RevenueModel.findById(id);
+        if (!revenue) throw new Error("Revenue not found");
+
+        // { new: true } → retorna o documento já atualizado, não o antigo
+        return await RevenueModel.findByIdAndUpdate(id, data, { new: true });
     }
+
 }
 
 export default RevenueService;

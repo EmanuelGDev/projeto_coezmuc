@@ -1,8 +1,8 @@
 import authenticate from "../../lib/jwt.js";
-import type { FastifyInstance } from "fastify";
 import ExpenseController from "./controller.js";
+import type { FastifyInstance } from "fastify";
 
-async function ExpenseRoutes(fastify: FastifyInstance) {
+async function expenseRoutes(fastify: FastifyInstance) {
     const expenseController = new ExpenseController();
 
     fastify.post('/create', { preHandler: [authenticate] }, async (request, reply) => {
@@ -11,9 +11,15 @@ async function ExpenseRoutes(fastify: FastifyInstance) {
     fastify.delete('/delete/:id', { preHandler: [authenticate] }, async (request, reply) => {
         return expenseController.deleteExpense(request, reply);
     });
+    fastify.put('/update/:id', { preHandler: [authenticate] }, async (request, reply) => {
+        return expenseController.updateExpense(request, reply);
+    });
     fastify.get('/', { preHandler: [authenticate] }, async (request, reply) => {
         return expenseController.getExpenses(request, reply);
     });
+    fastify.get('/types', { preHandler: [authenticate] }, async (request, reply) => {
+        return expenseController.getTypes(request, reply);
+    });
 }
 
-export { ExpenseRoutes }
+export { expenseRoutes };
