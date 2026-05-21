@@ -27,7 +27,7 @@ class AuthService {
                 isAdmin: Boolean(user.isAdmin)
              },
             jwt_secret,
-            { expiresIn: '12h' }
+            { expiresIn: '24h' }
         );
 
         return {

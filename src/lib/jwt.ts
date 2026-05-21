@@ -19,6 +19,6 @@ export default async function authenticate(request: FastifyRequest, reply: Fasti
     ;(request as any).user = decoded;
   } catch (err) {
     console.log('ERRO:', err)
-    return reply.code(401).send({ error: "Token inválido ou expirado" });
+    return reply.code(401).send({ error: "Token inválido ou expirado. Tente fazer login novamente." });
   }
 }
