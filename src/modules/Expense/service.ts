@@ -10,7 +10,18 @@ export type ExpenseData = {
 
 class ExpenseService {
     // Ajuste os tipos conforme a realidade do seu projeto
-    types = ["Aluguel", "Utilities", "Salários", "Manutenção", "Outros"];
+    types = 
+        ["Coordenação Geral",
+        "Secretaria",
+        "Apoio Médico Espiritual",
+        "Manutenção",
+        "Integração e Artes", 
+        "Contabilidade",
+        "Esportes",
+        "Estudos",
+        "Maternagem",
+        "Nutrição"
+    ];
 
     async createExpense(data: ExpenseData, request: FastifyRequest) {
         const user = (request as any).user;
