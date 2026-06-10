@@ -101,25 +101,25 @@ class SubscriptionService {
 
     const fullValue = this.calculateFullValue(data.personalData.age);
 
-    const subscription = await SubscriptionModel.create({
-      userId: new mongoose.Types.ObjectId(data.userId),
-      personalData: data.personalData,
-      healthData: data.healthData,
-      paymentData: {
-        fullValue,
-        paidValue: 0,
-        paymentStatus: "pending",
-      },
-    });
+    // Busca e criação em paralelo não faz sentido aqui pois precisamos do userId validado,
+    // mas podemos buscar o user antes e já ter o email em mãos
+    const [subscription, user] = await Promise.all([
+      SubscriptionModel.create({
+        userId: new mongoose.Types.ObjectId(data.userId),
+        personalData: data.personalData,
+        healthData: data.healthData,
+        paymentData: {
+          fullValue,
+          paidValue: 0,
+          paymentStatus: "pending",
+        },
+      }),
+      UserModel.findById(data.userId),
+    ]);
 
-    // Busca o usuário para pegar o email
-    const user = await UserModel.findById(data.userId);
     if (user?.email) {
-      try {
-        await sendSubscriptionConfirmationEmail(user.email, data.personalData.name);
-      } catch (emailErr) {
-        console.error("Falha ao enviar email de confirmação:", emailErr);
-      }
+      sendSubscriptionConfirmationEmail(user.email, data.personalData.name)
+        .catch((emailErr) => console.error("Falha ao enviar email de confirmação:", emailErr));
     }
 
     return subscription;
