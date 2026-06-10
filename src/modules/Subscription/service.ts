@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { SubscriptionModel, UserModel } from "../../lib/scheema.js";
 import { FastifyRequest } from "fastify";
+import { sendSubscriptionConfirmationEmail } from "../../shared/email/emailService.js";
 
 export type SubscriptionData = {
   userId: string;
@@ -100,7 +101,7 @@ class SubscriptionService {
 
     const fullValue = this.calculateFullValue(data.personalData.age);
 
-    return SubscriptionModel.create({
+    const subscription = await SubscriptionModel.create({
       userId: new mongoose.Types.ObjectId(data.userId),
       personalData: data.personalData,
       healthData: data.healthData,
@@ -110,6 +111,18 @@ class SubscriptionService {
         paymentStatus: "pending",
       },
     });
+
+    // Busca o usuário para pegar o email
+    const user = await UserModel.findById(data.userId);
+    if (user?.email) {
+      try {
+        await sendSubscriptionConfirmationEmail(user.email, data.personalData.name);
+      } catch (emailErr) {
+        console.error("Falha ao enviar email de confirmação:", emailErr);
+      }
+    }
+
+    return subscription;
   }
 
   async getSubscriptions() {
