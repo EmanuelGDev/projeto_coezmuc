@@ -16,7 +16,7 @@ export function subscriptionConfirmationTemplate(name: string): string {
           <!-- Header -->
           <tr>
             <td style="background-color: #3D2C1E; padding: 32px; text-align: center;">
-              <p style="margin: 0 0 6px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #D4A96A;">Recebemos sua inscrição</p>
+              <p style="margin: 0 0 6px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #D4A96A;">Confirmação de Inscrição</p>
               <p style="margin: 0; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #8C7355;">COEZMUC — Zona do Mucuri</p>
             </td>
           </tr>
@@ -27,29 +27,11 @@ export function subscriptionConfirmationTemplate(name: string): string {
               <h1 style="font-family: Georgia, serif; font-size: 26px; font-weight: 400; color: #3D2C1E; text-align: center; margin: 0 0 8px;">Inscrição confirmada!</h1>
               <p style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #B07D4A; text-align: center; margin: 0 0 32px;">Seja bem-vindo(a)</p>
 
-              <p style="font-size: 15px; color: #3D2C1E; line-height: 1.7; margin: 0 0 24px;">
-                Olá, <strong>${name}</strong>! Sua inscrição no evento foi realizada com sucesso. Sua inscrição será analisada pela coordenação geral e, caso seja necessário, entraremos em contato. Fique atento(a) ao seu e-mail para atualizações sobre o status da sua inscrição.
+              <p style="font-size: 15px; color: #3D2C1E; line-height: 1.7; margin: 0 0 24px; text-align: center;">
+                Olá, <strong>${name}</strong>! Sua inscrição no evento confirmada. Estamos felizes em ter você conosco.
               </p>
 
-              <!-- Detalhes -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 12px; margin-bottom: 24px;">
-                <tr>
-                  <td style="padding: 20px 24px;">
-                    <p style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #8C7355; margin: 0 0 16px;">Detalhes da inscrição</p>
-                    <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px; border-collapse: collapse;">
-                      <tr style="border-bottom: 1px solid #E8DDD0;">
-                        <td style="color: #8C7355; padding: 10px 0;">Participante</td>
-                        <td style="color: #3D2C1E; text-align: right; padding: 10px 0;">${name}</td>
-                      </tr>
-                      <tr style="border-bottom: 1px solid #E8DDD0;">
-                        <td style="color: #8C7355; padding: 10px 0;">Evento</td>
-                        <td style="color: #3D2C1E; text-align: right; padding: 10px 0;">COEZMUC 2027</td>
-                      </tr>
-                      
-                    </table>
-                  </td>
-                </tr>
-              </table>
+              
 
               <p style="font-size: 14px; color: #5C4A36; line-height: 1.7; margin: 0 0 32px; text-align: center;">
                 Aguardamos você nos dias 06–10 de Fevereiro de 2027 na Escola Dr. Waldemar Neves da Rocha, Teófilo Otoni.
@@ -77,5 +59,5 @@ export function subscriptionConfirmationTemplate(name: string): string {
       </td>
     </tr>
   </table>
-</body>  `;
+</body>`;
 }

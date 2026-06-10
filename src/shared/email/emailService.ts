@@ -14,7 +14,7 @@ export async function sendSubscriptionConfirmationEmail(to: string, name: string
   await transporter.sendMail({
     from: `"Coezmuc" <${process.env.SMTP_USER}>`,
     to,
-    subject: "Inscrição confirmada!",
+    subject: "Recebemos sua inscrição!",
     html: subscriptionConfirmationTemplate(name),
   });
 }
