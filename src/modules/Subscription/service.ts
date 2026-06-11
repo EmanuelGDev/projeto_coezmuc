@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { SubscriptionModel, UserModel } from "../../lib/scheema.js";
-import { FastifyRequest } from "fastify";
 import { sendSubscriptionConfirmationEmail } from "../../shared/email/emailService.js";
+import { createHmac } from "crypto";
 
 export type SubscriptionData = {
   userId: string;
@@ -34,7 +34,6 @@ export type SubscriptionData = {
   };
 };
 
-// Campos obrigatórios de personalData e suas mensagens
 const REQUIRED_PERSONAL_FIELDS: { field: keyof SubscriptionData["personalData"]; message: string }[] = [
   { field: "name", message: "Nome é obrigatório" },
   { field: "cpf", message: "CPF é obrigatório" },
@@ -50,6 +49,12 @@ class SubscriptionService {
 
   // ─── Helpers privados ────────────────────────────────────────────────────────
 
+  private hashCpf(cpf: string): string {
+    const pepper = process.env.CPF_PEPPER;
+    if (!pepper) throw new Error("CPF_PEPPER não definido no ambiente");
+    return createHmac("sha256", pepper).update(cpf).digest("hex");
+  }
+
   private calculateFullValue(age: number): number {
     if (age < 3) return 0;
     if (age < 6) return 150;
@@ -62,7 +67,6 @@ class SubscriptionService {
       throw new Error("Dados obrigatórios ausentes");
     }
 
-    // Valida presença de cada campo obrigatório
     for (const { field, message } of REQUIRED_PERSONAL_FIELDS) {
       const value = data.personalData[field];
       if (value === undefined || value === null || value === "") {
@@ -70,25 +74,22 @@ class SubscriptionService {
       }
     }
 
-    // Valida formato do CPF
     const { cpf } = data.personalData;
     if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
       throw new Error("CPF inválido — deve conter exatamente 11 dígitos numéricos");
     }
 
-    // Valida CPF duplicado
-    const cpfAlreadyRegistered = await SubscriptionModel.findOne({ "personalData.cpf": cpf });
+    const cpfHash = this.hashCpf(cpf);
+    const cpfAlreadyRegistered = await SubscriptionModel.findOne({ "personalData.cpf": cpfHash });
     if (cpfAlreadyRegistered) {
       throw new Error("CPF já cadastrado");
     }
 
-    // Valida existência do usuário
     const userExists = await UserModel.findById(data.userId);
     if (!userExists) {
       throw new Error("Usuário não encontrado");
     }
 
-    // Valida consentimentos obrigatórios
     if (!data.personalData.imageConsent || !data.personalData.regulationsConsent) {
       throw new Error("Consentimento para uso de imagem e regulamento é obrigatório");
     }
@@ -101,12 +102,13 @@ class SubscriptionService {
 
     const fullValue = this.calculateFullValue(data.personalData.age);
 
-    // Busca e criação em paralelo não faz sentido aqui pois precisamos do userId validado,
-    // mas podemos buscar o user antes e já ter o email em mãos
     const [subscription, user] = await Promise.all([
       SubscriptionModel.create({
         userId: new mongoose.Types.ObjectId(data.userId),
-        personalData: data.personalData,
+        personalData: {
+          ...data.personalData,
+          cpf: this.hashCpf(data.personalData.cpf), // CPF nunca persiste em plain text
+        },
         healthData: data.healthData,
         paymentData: {
           fullValue,
@@ -148,7 +150,15 @@ class SubscriptionService {
     const subscription = await SubscriptionModel.findById(new mongoose.Types.ObjectId(id));
     if (!subscription) throw new Error("Inscrição não encontrada");
 
-    // Recalcula fullValue se a idade foi alterada
+    // Se o CPF foi enviado no update, faz hash antes de persistir
+    if (data.personalData?.cpf) {
+      const { cpf } = data.personalData;
+      if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
+        throw new Error("CPF inválido — deve conter exatamente 11 dígitos numéricos");
+      }
+      data.personalData.cpf = this.hashCpf(cpf);
+    }
+
     if (data.personalData?.age !== undefined) {
       data.paymentData = {
         fullValue: this.calculateFullValue(data.personalData.age),
