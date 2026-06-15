@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
-import { subscriptionConfirmationTemplate } from "./templates/subscription-confirmation.js";
+import { subscriptionConfirmationTemplate } from "./templates/subscription-recived.js";
+import { subscriptionConfirmedTemplate } from "./templates/subscription-confirmed.js";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -10,11 +11,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.verify((error) => {
+  if (error) console.error("SMTP connection error:", error);
+  else console.log("SMTP pronto para envio");
+});
+
 export async function sendSubscriptionConfirmationEmail(to: string, name: string): Promise<void> {
   await transporter.sendMail({
     from: `"Coezmuc" <${process.env.SMTP_USER}>`,
     to,
     subject: "Recebemos sua inscrição!",
     html: subscriptionConfirmationTemplate(name),
+  });
+}
+
+export async function sendSubscriptionConfirmatedEmail(to: string, name: string): Promise<void> {
+  await transporter.sendMail({
+    from: `"Coezmuc" <${process.env.SMTP_USER}>`,
+    to,
+    subject: "Sua inscrição foi confirmada!",
+    html: subscriptionConfirmedTemplate(name),
   });
 }

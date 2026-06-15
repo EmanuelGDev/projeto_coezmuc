@@ -25,7 +25,7 @@ export function subscriptionConfirmationTemplate(name: string): string {
           <tr>
             <td style="padding: 40px 32px;">
               <h1 style="font-family: Georgia, serif; font-size: 26px; font-weight: 400; color: #3D2C1E; text-align: center; margin: 0 0 8px;">Inscrição confirmada!</h1>
-              <p style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #B07D4A; text-align: center; margin: 0 0 32px;">Seja bem-vindo(a)</p>
+              <p style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #B07D4A; text-align: center; margin: 0 0 32px;">Estamos felizes em ter você conosco!</p>
 
               <p style="font-size: 15px; color: #3D2C1E; line-height: 1.7; margin: 0 0 24px;">
                 Olá, <strong>${name}</strong>! Sua inscrição no evento foi realizada com sucesso. Sua inscrição será analisada pela coordenação geral e, caso seja necessário, entraremos em contato. Fique atento(a) ao seu e-mail para atualizações sobre o status da sua inscrição.
@@ -52,7 +52,7 @@ export function subscriptionConfirmationTemplate(name: string): string {
               </table>
 
               <p style="font-size: 14px; color: #5C4A36; line-height: 1.7; margin: 0 0 32px; text-align: center;">
-                Aguardamos você nos dias 06–10 de Fevereiro de 2027 na Escola Dr. Waldemar Neves da Rocha, Teófilo Otoni.
+                Acesse abaixo para acompanhar suas inscrições e obter mais informações sobre o evento. Estamos ansiosos para tê-lo(a) conosco no COEZMUC 2027!
               </p>
 
               <!-- CTA -->

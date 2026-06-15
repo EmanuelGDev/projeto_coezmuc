@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { SubscriptionModel, UserModel } from "../../lib/scheema.js";
-import { sendSubscriptionConfirmationEmail } from "../../shared/email/emailService.js";
+import { sendSubscriptionConfirmatedEmail, sendSubscriptionConfirmationEmail } from "../../shared/email/emailService.js";
 import { createHmac } from "crypto";
 
 export type SubscriptionData = {
@@ -123,7 +123,6 @@ class SubscriptionService {
       sendSubscriptionConfirmationEmail(user.email, data.personalData.name)
         .catch((emailErr) => console.error("Falha ao enviar email de confirmação:", emailErr));
     }
-
     return subscription;
   }
 
@@ -153,9 +152,6 @@ class SubscriptionService {
     // Se o CPF foi enviado no update, faz hash antes de persistir
     if (data.personalData?.cpf) {
       const { cpf } = data.personalData;
-      if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
-        throw new Error("CPF inválido — deve conter exatamente 11 dígitos numéricos");
-      }
       data.personalData.cpf = this.hashCpf(cpf);
     }
 
@@ -165,6 +161,13 @@ class SubscriptionService {
         paidValue: data.paymentData?.paidValue ?? subscription.paymentData?.paidValue ?? 0,
         paymentStatus: data.paymentData?.paymentStatus ?? subscription.paymentData?.paymentStatus ?? "pending",
       };
+    }
+    if (data.status?.subscriptionStatus === "active") {
+      const user = await UserModel.findById(subscription.userId);
+      if (user?.email) {
+        sendSubscriptionConfirmatedEmail(user.email, subscription.personalData?.name ?? "Confraternista")
+          .catch((emailErr) => console.error("Falha ao enviar email de confirmação de inscrição:", emailErr));
+      }
     }
 
     return SubscriptionModel.findByIdAndUpdate(
