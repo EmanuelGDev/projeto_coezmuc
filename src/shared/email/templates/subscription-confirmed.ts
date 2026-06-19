@@ -43,7 +43,7 @@ export function subscriptionConfirmedTemplate(name: string): string {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
-                    <a href="https://coezmuc.vercel.app/my-subscriptions" style="display: inline-block; background-color: #3D2C1E; color: #FAF7F2; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 32px; border-radius: 8px; text-decoration: none;">Regularmento</a>
+                    <a href="https://drive.google.com/file/d/1xIe_aqpzazRa_3gZ0IIUQvrE98YHjLrK/view?usp=sharing" style="display: inline-block; background-color: #3D2C1E; color: #FAF7F2; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 32px; border-radius: 8px; text-decoration: none;">Regularmento</a>
                   </td>
                 </tr>
               </table>
