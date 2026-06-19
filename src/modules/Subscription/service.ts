@@ -57,9 +57,9 @@ class SubscriptionService {
 
   private calculateFullValue(age: number): number {
     if (age < 3) return 0;
-    if (age < 6) return 150;
-    if (age < 11) return 200;
-    return 400;
+    if (age < 6) return 160;
+    if (age < 11) return 215;
+    return 430;
   }
 
   private async validateSubscriptionData(data: SubscriptionData): Promise<void> {
