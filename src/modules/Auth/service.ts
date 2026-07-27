@@ -23,23 +23,40 @@ class AuthService {
         }
 
         const token = jwt.sign(
-            { userId: user._id,
-                isAdmin: Boolean(user.isAdmin)
-             },
+            {
+                userId: user._id,
+                isAdmin: Boolean(user.isAdmin),
+                tokenVersion: user.tokenVersion ?? 0,
+            },
             jwt_secret,
             { expiresIn: '168h' }
         );
 
         return {
-            id: user._id,
-            name: user.username,
-            email: user.email,
-            token,
-            isAdmin: Boolean(user.isAdmin)
-            
+            token, // o controller extrai isso e NÃO manda no corpo da resposta
+            user: {
+                id: user._id,
+                name: user.username,
+                email: user.email,
+                isAdmin: Boolean(user.isAdmin),
+            },
         };
     }
 
+    async logout(userId: string) {
+        await UserModel.updateOne({ _id: userId }, { $inc: { tokenVersion: 1 } });
+    }
+
+    async me(userId: string) {
+        const user = await UserModel.findById(userId).select('username email isAdmin');
+        if (!user) throw new Error("User not found");
+        return {
+            id: user._id,
+            name: user.username,
+            email: user.email,
+            isAdmin: Boolean(user.isAdmin),
+        };
+    }
 }
 
 export { AuthService }

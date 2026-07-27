@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import jwt from "jsonwebtoken";
-import { UserModel } from "../lib/scheema.js"; // ajuste o caminho relativo pro schema real
+import { UserModel } from "../lib/scheema.js"; // ajuste o caminho relativo conforme onde esse arquivo está
 
 const JWT_SECRET = process.env.JWT_SECRET as string
 

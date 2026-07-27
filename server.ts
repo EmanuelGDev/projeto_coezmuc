@@ -1,6 +1,7 @@
 import './src/env.js';
 import fastify from 'fastify';
 import cors from '@fastify/cors';
+import fastifyCookie from '@fastify/cookie';
 import mongoose from 'mongoose';
 import { routes } from './src/routes/routes.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
@@ -31,10 +32,13 @@ const buildApp = async () => {
     if (appReady) return app
 
     await app.register(cors, {
-        origin: process.env.CORS_ORIGIN || "*",
+        origin: process.env.CORS_ORIGIN || (process.env.VERCEL !== '1' ? 'http://localhost:5173' : undefined),
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
     })
+
+    await app.register(fastifyCookie)
 
     await app.register(routes)
     await app.ready()
