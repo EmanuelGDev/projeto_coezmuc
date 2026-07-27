@@ -18,8 +18,8 @@ class AuthController {
 
             reply.setCookie('token', token, {
                 httpOnly: true,
-                secure: isProd,
-                sameSite: 'strict',
+                secure: true,
+                sameSite: 'none',
                 path: '/',
                 maxAge: 60 * 60 * 168, // 168h em segundos
             });
