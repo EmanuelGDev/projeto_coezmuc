@@ -19,7 +19,7 @@ class AuthService {
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            throw new Error("Invalid password");
+            throw new Error("Credenciais inválidas. Verifique seu e-mail e senha.");
         }
 
         const token = jwt.sign(

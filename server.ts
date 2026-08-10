@@ -2,11 +2,15 @@ import './src/env.js';
 import fastify from 'fastify';
 import cors from '@fastify/cors';
 import fastifyCookie from '@fastify/cookie';
+import fastifyRateLimit from '@fastify/rate-limit';
 import mongoose from 'mongoose';
 import { routes } from './src/routes/routes.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const app = fastify({ logger: false })
+const app = fastify({
+    logger: false,
+    trustProxy: true, // necessário na Vercel para o rate-limit enxergar o IP real do cliente (via X-Forwarded-For)
+})
 
 let isConnected = false
 
@@ -39,6 +43,11 @@ const buildApp = async () => {
     })
 
     await app.register(fastifyCookie)
+
+    // global: false -> só aplica limite nas rotas que declararem config.rateLimit explicitamente
+    await app.register(fastifyRateLimit, {
+        global: false,
+    })
 
     await app.register(routes)
     await app.ready()
