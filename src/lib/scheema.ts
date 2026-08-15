@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const User = new mongoose.Schema({
-    username: { type: String, required: true,},
-    password: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    isAdmin : {type : Boolean},
-    tokenVersion: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now }
+  username: { type: String, required: true, },
+  password: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  isAdmin: { type: Boolean },
+  tokenVersion: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now }
 });
 
 const subscription = new mongoose.Schema({
@@ -14,14 +14,14 @@ const subscription = new mongoose.Schema({
 
   personalData: {
     name: { type: String, required: true },
-    cpf : { type: String, required: true, unique: true },
+    cpf: { type: String, required: true, unique: true },
     age: { type: Number, required: true },
     phoneNumber: { type: String, required: true },
     minorsGuardianName: { type: String },
     city: { type: String, required: true },
     centroEspirita: { type: String, required: true },
     badgeName: { type: String, required: true },
-    emergencyContact: { type: String},
+    emergencyContact: { type: String },
     address: { type: String, required: true },
     imageConsent: { type: Boolean, required: true },
     regulationsConsent: { type: Boolean, required: true },
@@ -66,7 +66,18 @@ const Expense = new mongoose.Schema({
   value: { type: Number, required: true },
 });
 
+
+const passwordResetTokenSchema = new mongoose.Schema({
+  userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true,},
+  tokenHash: {type: String, required: true, unique: true,},
+  used: {type: Boolean, default: false,},
+  expiresAt: {type: Date, required: true,},
+}, { timestamps: true });
+
+passwordResetTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 export const UserModel = mongoose.model('User', User);
 export const SubscriptionModel = mongoose.model('Subscription', subscription);
 export const RevenueModel = mongoose.model('Revenue', Revenue);
 export const ExpenseModel = mongoose.model('Expense', Expense);
+export const PasswordResetTokenModel = mongoose.model('PasswordResetToken', passwordResetTokenSchema);

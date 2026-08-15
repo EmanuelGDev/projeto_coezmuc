@@ -50,6 +50,36 @@ class AuthController {
             reply.code(400).send({ message: (err as Error).message });
         }
     }
+
+    async forgotPassword(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const { email } = request.body as { email: string };
+            await this.service.forgotPassword(email);
+            reply.code(200).send({ message: "Email de recuperação enviado." });
+        } catch (err) {
+            reply.code(400).send({ message: (err as Error).message });
+        }
+    }
+
+    async verifyResetToken(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const { token } = request.query as { token: string };
+            const result = await this.service.verifyResetToken(token);
+            reply.code(200).send(result);
+        } catch (err) {
+            reply.code(400).send({ message: (err as Error).message });
+        }
+    }
+
+    async resetPassword(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const { token, newPassword } = request.body as { token: string; newPassword: string };
+            await this.service.resetPassword(token, newPassword);
+            reply.code(200).send({ message: "Senha redefinida com sucesso." });
+        } catch (err) {
+            reply.code(400).send({ message: (err as Error).message });
+        }
+    }
 }
 
 export { AuthController }
