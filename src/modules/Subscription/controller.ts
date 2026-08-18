@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { SubscriptionService, type SubscriptionData } from "./service.js";
+import { toCsv } from "./utils.js";
 
 class SubscriptionController {
   private service: SubscriptionService;
@@ -86,12 +87,27 @@ class SubscriptionController {
 
   async getRevenueSummary(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const summary = await this.service.getRevenueSummary();
-        return reply.code(200).send({ data: summary });
+      const summary = await this.service.getRevenueSummary();
+      return reply.code(200).send({ data: summary });
     } catch (err) {
-        return this.handleError(err, reply);
+      return this.handleError(err, reply);
     }
-}
+  }
+  async exportSubscriptionsCsv(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const subscriptions = await this.service.getSubscriptionsForExport();
+      const csv = toCsv(subscriptions);
+      const filename = `inscricoes-${new Date().toISOString().slice(0, 10)}.csv`;
+
+      return reply
+        .header("Content-Type", "text/csv; charset=utf-8")
+        .header("Content-Disposition", `attachment; filename="${filename}"`)
+        .code(200)
+        .send(csv);
+    } catch (err) {
+      return this.handleError(err, reply);
+    }
+  }
 }
 
 export { SubscriptionController };

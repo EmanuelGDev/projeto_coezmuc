@@ -190,6 +190,32 @@ class SubscriptionService {
     ]);
     return result[0] ?? { total: 0, count: 0 };
   }
+
+  async getSubscriptionsForExport() {
+    const subscriptions = await SubscriptionModel.find()
+      .sort({ "personalData.name": 1 })
+      .collation({ locale: "pt", strength: 1 })
+      .populate("userId", "username")
+      .lean();
+
+    return subscriptions.map((sub: any) => ({
+      nome: sub.personalData?.name ?? "",
+      idade: sub.personalData?.age ?? "",
+      telefone: sub.personalData?.phoneNumber ?? "",
+      cidade: sub.personalData?.city ?? "",
+      centroEspirita: sub.personalData?.centroEspirita ?? "",
+      nomeCracha: sub.personalData?.badgeName ?? "",
+      endereco: sub.personalData?.address ?? "",
+      restricaoAlimentar: sub.healthData?.restricaoAlimentar ?? "",
+      restricaoMedica: sub.healthData?.restricaoMedica ?? "",
+      cuidadosEspeciais: sub.healthData?.cuidadosEspeciais ?? "",
+      valorTotal: sub.paymentData?.fullValue ?? 0,
+      valorPago: sub.paymentData?.paidValue ?? 0,
+      statusPagamento: sub.paymentData?.paymentStatus ?? "",
+      statusInscricao: sub.status?.subscriptionStatus ?? "",
+      usuario: sub.userId?.username ?? "",
+    }));
+  }
 }
 
 export { SubscriptionService };
